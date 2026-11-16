@@ -1,33 +1,235 @@
-import '@fontsource/anton/latin-400.css';
-import './style.css';
-import { mountMotion } from './motion.js';
-const logo = `<svg preserveAspectRatio="none" viewBox="0 0 220 70" aria-label="SA" role="img"><path fill="currentColor" d="M0 10.5 27 0h53l27 10.5v12H53.5V35H107v24.5L80 70H27L0 59.5v-12h53.5V35H0zM113 10.5 140 0h53l27 10.5V70h-27V47.5h-53V70h-27zm27 12v12.5h53V22.5z"/></svg>`;
-const works = [
- ['OA','OBYS AGENCY','OBYS AGENCY','2026',0,'obys-agency'],['MV','MARIA VASILYEVA','MARIA VASILYEVA (DESIGN)','2026',6,'maria-vasilyeva'],['AC','ANNA COOPER','TOM SCHIMBERG (DESIGN)','2026',1,'anna-cooper'],['YB','YELLOWBILLY','BRIAN STEFANI (DESIGN)','2026',2,'yellowbilly'],['CS','CARLES STUDIO','BRIAN STEFANI (DESIGN)','2025',2,'carles-studio'],['SK','SIMON KELLERMAN','STEFAN KELLERMAN (DESIGN)','2025',3,'simon-kellerman'],['PT','PANOPTICON','BRIAN STEFANI (DESIGN)','2024',4,'panopticon'],['MG','MODEM GARDEN','MODEM STUDIO','2025',10,'modem-garden'],['ZT','ZERO THEOREM','LUIS BIZARRO (DEVELOPER)','2026',7,'zero-theorem'],['FD','FIELD DAY','FREDDY DUMAS','2025',8,'field-day'],['FF','FLOWER FICTION','INDEPENDENT','2025',9,'flower-fiction'],['OT','OFFTONE FESTIVAL 2026','OLLIE GEORGE (DESIGN)','2026',4,'offtone'],['FF','CARLES FAUS','CALETA STUDIO (DESIGN)','2024',12,'carlesfaus'],['CG','CRISTINA GÓMEZ','ALEX TKACHEV (DESIGN)','2025',13,'cristina-gomez']
-];
-const base=import.meta.env.BASE_URL;
-const asset=i=>`${base}assets/work-${i}.webp`;
-const nav=()=>`<nav aria-label="Main navigation"><a href="/#home">HOME</a><a href="/#projects">PROJECTS(14)</a><a href="/#about">ABOUT</a></nav>`;
-const app=document.querySelector('#app');
-function home(){
- document.title='Surya Aditya — Web Developer';
- app.innerHTML=`<div class="intro" aria-hidden="true"><div class="intro-logo">${logo}</div><div class="intro-strip">${Array.from({length:11},(_,i)=>`<img style="--card:${i};--offset:${i-5}" src="${asset(i)}" alt="">`).join('')}</div></div>
- <main id="home"><section class="hero"><h1>SURYA ADITYA</h1><div class="masthead"><p><span class="prefix">INFO.</span> HE CREATES EXPERIENCES THROUGH CODE AND CREATIVE<br>TECHNOLOGY, EXPLORING WHAT A WEBSITE CAN BE<br>AND HOW IT CAN FEEL.</p>${nav()}<span>©2026</span></div><div class="hero-center"><a class="small-logo" href="#about" aria-label="About Surya">${logo}</a><img class="hero-portrait" src="${base}assets/portrait.webp" alt="Black and white profile portrait of Surya Aditya"><p>SURYA ADITYA IS <span></span> A WEB DEVELOPER<br>BORN IN BALI, INDONESIA, WHO HAS BEEN WORKING<br>INDEPENDENTLY IN WEB DEVELOPMENT SINCE 2022.</p></div><div class="hero-bottom"><span>INDEPENDENT WEB DEVELOPER</span><a href="#projects">SCROLL TO EXPLORE ↓</a><span>BALI, INDONESIA <span id="clock"></span></span></div></section>
- <section id="about" class="portrait-section"><div class="portrait-sticky"><img src="${base}assets/portrait.webp" alt="Surya Aditya in silhouette"><div class="portrait-copy"><div class="small-logo">${logo}</div><p>HIS WORK HAS EARNED INTERNATIONAL RECOGNITION FROM<br>AWWWARDS, THE FWA, AND CSS DESIGN AWARDS.<br><br>3× AWWWARDS INDEPENDENT OF THE YEAR (NOMINEE 2023–25)<br>1× AWWWARDS ECOMMERCE OF THE YEAR (NOMINEE 2024)<br>8× AWWWARDS SITE OF THE DAY<br>8× AWWWARDS DEVELOPER AWARD<br>5× FWA WEBSITE OF THE DAY<br>7× CSSDA WEBSITE OF THE DAY</p><span>INDEPENDENT, 01/2022</span></div></div></section>
- <section id="projects" class="projects" aria-label="Selected projects">${works.map((w,i)=>`<a class="project" href="/work/${w[5]}" data-index="${i}"><div class="project-title"><span>P.${String(i+1).padStart(2,'0')}</span><span>${w[0]}</span><span class="project-arrow">→</span></div><div class="project-meta"><span>PROJECT ${String(i+1).padStart(2,'0')}</span><span><i>CLIENT.</i> ${w[1]}</span><span><i>WITH.</i> ${w[2]}</span><span><i>YEAR.</i> ${w[3]}</span></div></a>`).join('')}</section>
- <footer><div class="footer-nav">${nav()}<div class="socials"><a href="https://www.instagram.com/" target="_blank" rel="noreferrer">INSTAGRAM ↗</a><a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LINKEDIN ↗</a><a href="https://www.behance.net/" target="_blank" rel="noreferrer">BEHANCE ↗</a></div><a href="mailto:hello@surya-aditya.com">LET’S TALK ↗</a></div><div class="footer-mark">${logo}<img src="${base}assets/portrait.webp" alt="" aria-hidden="true"></div><div class="footer-bottom"><span>OPEN FOR SELECT COLLABORATIONS</span><a href="#home">BACK TO TOP ↑</a><span>© SURYA ADITYA 2026</span></div></footer></main><img class="hover-preview" alt="Project preview"><div class="cursor" aria-hidden="true"></div>`;
- const intro=document.querySelector('.intro');
- if(sessionStorage.getItem('visited'))intro.remove();else{document.body.classList.add('intro-playing')}
- const preview=document.querySelector('.hover-preview');
- document.querySelectorAll('.project').forEach(row=>{row.addEventListener('pointerenter',()=>{preview.src=asset(works[+row.dataset.index][4]);preview.classList.add('visible')});row.addEventListener('pointerleave',()=>preview.classList.remove('visible'));row.addEventListener('pointermove',()=>{})});
- const portrait=document.querySelector('.portrait-section');
- const scroll=()=>{const r=portrait.getBoundingClientRect();const p=Math.max(0,Math.min(1,(innerHeight-r.top)/(innerHeight*1.25)));portrait.style.setProperty('--progress',p);};
- window.onscroll=scroll;scroll();
- const clock=document.querySelector('#clock');clock.textContent=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Makassar',hour:'2-digit',minute:'2-digit'}).format(new Date());
- if(location.hash)setTimeout(()=>document.querySelector(location.hash)?.scrollIntoView(),100);
+import "@fontsource/anton/latin-400.css";
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "./style.css";
+import { logo, artworks } from "./content.js";
+import { renderPage, routeFromPath, metadata } from "./render.js";
+import { mountMotion, disposeMotion } from "./motion.js";
+const base = import.meta.env.BASE_URL,
+  app = document.querySelector("#app");
+let preferences;
+try {
+  preferences = localStorage.getItem("reduce-motion") === "true";
+} catch {}
+const systemMotion = matchMedia("(prefers-reduced-motion: reduce)");
+export const motionReduced = () => systemMotion.matches || preferences === true;
+let currentRoute = routeFromPath(location.pathname, base),
+  introPlayed = false,
+  pageController;
+const storage = {
+  get() {
+    try {
+      return sessionStorage.getItem("visited") === "1";
+    } catch {
+      return introPlayed;
+    }
+  },
+  set() {
+    introPlayed = true;
+    try {
+      sessionStorage.setItem("visited", "1");
+    } catch {}
+  },
+};
+function updateMeta() {
+  const meta = metadata(currentRoute);
+  document.title = meta.title;
+  document
+    .querySelector('meta[name="description"]')
+    ?.setAttribute("content", meta.description);
+  for (const [selector, value] of [
+    ['link[rel="canonical"]', meta.url],
+    ['meta[property="og:title"]', meta.title],
+    ['meta[property="og:description"]', meta.description],
+    ['meta[property="og:url"]', meta.url],
+    ['meta[name="twitter:title"]', meta.title],
+    ['meta[name="twitter:description"]', meta.description],
+  ]) {
+    const node = document.querySelector(selector);
+    node?.setAttribute(node.tagName === "LINK" ? "href" : "content", value);
+  }
 }
-function detail(slug){const index=works.findIndex(w=>w[5]===slug);if(index<0){history.replaceState({},'',base);home();return}const w=works[index];document.title=`${w[1]} — Surya Aditya`;app.innerHTML=`<main class="detail"><header class="detail-header"><div class="detail-title"><span>P.${String(index+1).padStart(2,'0')}</span><span>${w[0]}</span></div><div class="project-meta"><a href="/#projects">BACK TO HOME</a><span>${w[1]}</span><span>${w[2]}</span><span>${w[3]}</span></div></header><div class="detail-layout"><div class="detail-images"><img style="view-transition-name:project-art" src="${asset(w[4])}" alt="${w[1]} project artwork"><div class="project-poster"><span>${w[1]}</span><img src="${asset(w[4])}" alt="Project visual"><span>DESIGN & DEVELOPMENT — ${w[3]}</span></div><img src="${asset((w[4]+1)%11)}" alt="Project visual detail"></div><aside><a href="/#projects">↖ BACK TO HOME</a><p>${w[1]}<br>A DIGITAL EXPERIENCE EXPLORING DESIGN, MOVEMENT AND INTERACTION.</p><dl><dt>CLIENT</dt><dd>${w[1]}</dd><dt>COLLABORATION</dt><dd>${w[2]}</dd><dt>YEAR</dt><dd>${w[3]}</dd></dl><a href="/work/${works[(index+1)%14][5]}">NEXT PROJECT →</a></aside></div></main>`;window.onscroll=null;window.scrollTo(0,0)}
-function render(){location.pathname.slice(base.length-1).startsWith('/work/')?detail(location.pathname.slice(base.length-1).split('/')[2]):home();document.querySelectorAll('a[href^="/"]').forEach(a=>{a.setAttribute('href',base+a.getAttribute('href').slice(1))});mountMotion(logo)}
-document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a||a.origin!==location.origin||a.protocol==='mailto:')return;if(a.pathname===location.pathname&&a.hash)return;e.preventDefault();const navigate=()=>{history.pushState({},'',a.href);render()};if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const image=document.querySelector('.preview-surface.visible')||document.querySelector('.hover-preview.visible');if(image)image.style.viewTransitionName='project-art';document.startViewTransition(navigate)}else navigate()});
-if(new URLSearchParams(location.search).has('replay'))sessionStorage.removeItem('visited');
-window.addEventListener('popstate',render);render();
+function bindPage() {
+  pageController?.abort();
+  pageController = new AbortController();
+  const { signal } = pageController;
+  updateMeta();
+  const preview = document.querySelector(".hover-preview");
+  document.querySelectorAll(".project").forEach((row) => {
+    const show = (keyboard) => {
+      if (!preview) return;
+      preview.src = row.dataset.art;
+      preview.classList.add("visible");
+      if (keyboard)
+        document.dispatchEvent(
+          new CustomEvent("preview-position", {
+            detail: { x: innerWidth * 0.74, y: innerHeight * 0.5 },
+          }),
+        );
+      document.dispatchEvent(
+        new CustomEvent("preview-image", { detail: preview.src }),
+      );
+    };
+    row.addEventListener("pointerenter", () => show(false), { signal });
+    row.addEventListener("focus", () => show(true), { signal });
+    row.addEventListener(
+      "pointerleave",
+      () => {
+        if (!row.matches(":focus-visible"))
+          preview?.classList.remove("visible");
+      },
+      { signal },
+    );
+    row.addEventListener("blur", () => preview?.classList.remove("visible"), {
+      signal,
+    });
+  });
+  const replay = document.querySelector(".replay-intro");
+  if (replay) {
+    replay.hidden = Boolean(currentRoute) || motionReduced();
+    if (!replay.hidden)
+      replay.addEventListener(
+        "click",
+        () => {
+          document
+            .querySelector(".hero")
+            ?.scrollIntoView({ behavior: "instant" });
+          startIntro(true);
+        },
+        { signal },
+      );
+  }
+  const toggle = document.querySelector(".motion-toggle");
+  if (toggle) {
+    toggle.hidden = false;
+    toggle.setAttribute("aria-pressed", String(preferences === true));
+    toggle.textContent = systemMotion.matches
+      ? "System: reduced motion"
+      : preferences
+        ? "Enable motion"
+        : "Reduce motion";
+    toggle.disabled = systemMotion.matches;
+    toggle.addEventListener(
+      "click",
+      () => {
+        preferences = !preferences;
+        try {
+          localStorage.setItem("reduce-motion", String(preferences));
+        } catch {}
+        refreshMotion();
+      },
+      { signal },
+    );
+  }
+  mountMotion(logo, { reduced: motionReduced() });
+}
+function finishIntro() {
+  if (document.querySelector(".intro"))
+    performance.mark("portfolio:intro-complete");
+  storage.set();
+  document.querySelector(".intro")?.remove();
+  document.body.classList.remove("intro-playing");
+  document.body.classList.add("motion-ready");
+}
+function startIntro(full = false) {
+  if (currentRoute || motionReduced()) return;
+  finishIntro();
+  const intro = document.createElement("div");
+  intro.className = "intro";
+  intro.innerHTML = `<div class="intro-logo" aria-hidden="true">${logo}</div><div class="intro-strip" aria-hidden="true">${Array.from({ length: 11 }, (_, i) => `<img src="${i === 5 ? base + "art/optimized/sand-spline-02-400.webp" : base + "art/optimized/" + artworks[i % 3].id + "-400.webp"}" alt="">`).join("")}</div><button type="button" class="skip-intro">Skip intro</button>`;
+  document.body.append(intro);
+  document.body.classList.add("intro-playing");
+  intro.querySelector("button").addEventListener("click", () => {
+    finishIntro();
+    document.querySelector("#main")?.focus({ preventScroll: true });
+  });
+  mountMotion(logo, {
+    reduced: false,
+    intro,
+    duration: full ? 5.05 : 1.8,
+    onIntroComplete: finishIntro,
+  });
+}
+function refreshMotion() {
+  finishIntro();
+  bindPage();
+}
+systemMotion.addEventListener("change", refreshMotion);
+function activate({ focus = false, restore = null } = {}) {
+  disposeMotion();
+  currentRoute = routeFromPath(location.pathname, base);
+  app.innerHTML = renderPage(currentRoute, base);
+  bindPage();
+  requestAnimationFrame(() => {
+    if (restore) {
+      window.scrollTo({ top: restore.scroll || 0, behavior: "instant" });
+      document.getElementById(restore.focusId)?.focus({ preventScroll: true });
+      return;
+    }
+    const target = location.hash
+      ? document.getElementById(decodeURIComponent(location.hash.slice(1)))
+      : null;
+    if (target) target.scrollIntoView({ behavior: "instant", block: "center" });
+    else window.scrollTo({ top: 0, behavior: "instant" });
+    if (focus)
+      (target?.matches("a") ? target : document.querySelector("#main"))?.focus({
+        preventScroll: true,
+      });
+  });
+}
+history.scrollRestoration = "manual";
+document.addEventListener("click", (event) => {
+  const a = event.target.closest("a");
+  if (
+    !a ||
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey ||
+    a.target ||
+    a.hasAttribute("download") ||
+    a.origin !== location.origin ||
+    !a.pathname.startsWith(base)
+  )
+    return;
+  if (a.pathname === location.pathname && a.hash) return;
+  event.preventDefault();
+  finishIntro();
+  history.replaceState(
+    { ...history.state, scroll: scrollY, focusId: a.closest(".project")?.id },
+    "",
+  );
+  const go = () => {
+    history.pushState({}, "", a.href);
+    activate({ focus: true });
+  };
+  if (document.startViewTransition && !motionReduced()) {
+    const image = document.querySelector(".preview-surface.visible");
+    if (image) image.style.viewTransitionName = "project-art";
+    document.startViewTransition(go);
+  } else go();
+});
+document.addEventListener("focusin", (event) => {
+  if (document.querySelector(".intro") && !event.target.closest(".intro"))
+    finishIntro();
+});
+window.addEventListener("popstate", () =>
+  activate({ restore: history.state || { scroll: 0 } }),
+);
+if (!app.querySelector("main")) app.innerHTML = renderPage(currentRoute, base);
+bindPage();
+if (
+  !currentRoute &&
+  !location.hash &&
+  (!storage.get() || new URLSearchParams(location.search).has("replay"))
+)
+  startIntro(new URLSearchParams(location.search).has("replay"));
+if (location.hash)
+  requestAnimationFrame(() =>
+    document
+      .getElementById(decodeURIComponent(location.hash.slice(1)))
+      ?.scrollIntoView({ behavior: "instant", block: "center" }),
+  );
+if (new URLSearchParams(location.search).has("metrics")) import("./metrics.js");

@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-16",
+  "scope": "Local Endi portfolio production build, mobile simulation; not public-origin or field data",
+  "lighthouseVersion": "13.6.0",
+  "fetchTime": "2026-11-16T15:00:52.973Z",
+  "formFactor": "mobile",
+  "throttlingMethod": "simulate",
+  "throttling": {
+    "rttMs": 150,
+    "throughputKbps": 1638.4,
+    "requestLatencyMs": 562.5,
+    "downloadThroughputKbps": 1474.5600000000002,
+    "uploadThroughputKbps": 675,
+    "cpuSlowdownMultiplier": 4
+  },
+  "scores": {
+    "performance": 99,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+  },
+  "metrics": {
+    "first-contentful-paint": {
+      "value": 1404.4009,
+      "unit": "millisecond"
+    },
+    "largest-contentful-paint": {
+      "value": 1404.4009,
+      "unit": "millisecond"
+    },
+    "total-blocking-time": {
+      "value": 61.99999999999977,
+      "unit": "millisecond"
+    },
+    "cumulative-layout-shift": {
+      "value": 0.059267239823129085,
+      "unit": "unitless"
+    }
+  },
+  "warnings": [],
+  "optimizationEvidence": {
+    "initialUpgradePerformanceScore": 78,
+    "initialUpgradeTBTms": 960,
+    "optimizedPerformanceScore": 99,
+    "optimizedTBTms": 62,
+    "changes": [
+      "400px initial hero with progressive HD decode on expansion",
+      "Responsive AVIF about artwork instead of duplicate full-size WebP",
+      "Predecoded ImageBitmap intro surfaces",
+      "Adaptive card subdivisions and 30fps cap",
+      "Native project link labels instead of overriding visible text"
+    ]
+  },
+  "limits": [
+    "One optimized simulated mobile Lighthouse run",
+    "Not real-user or device GPU data",
+    "INP not measured by this navigation run",
+    "Automated accessibility score is not WCAG conformance",
+    "Human visitor study and physical Safari/Android testing remain unrun"
+  ],
+  "regressionSuite": {
+    "tests": 20,
+    "passed": 20,
+    "failed": 0,
+    "durationSeconds": 35.3,
+    "target": "Fresh production static build at /t014/",
+    "includes": [
+      "Initial/replayed/skipped intro",
+      "Responsive 320/390/768/1440 widths",
+      "Keyboard previews and focus/scroll restoration",
+      "Native Ctrl-click",
+      "OS and user motion preferences",
+      "Idle preview and footer draw suppression",
+      "WebGL unavailable and context loss",
+      "All five pages without JavaScript",
+      "HTTP 200 routes and real 404",
+      "Credits/original downloads/MIT notices",
+      "axe with WCAG 2.1 A label checks",
+      "Failed artwork requests and complete shader samplers"
+    ]
+  }
+}
