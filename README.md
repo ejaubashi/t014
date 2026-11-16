@@ -23,3 +23,5 @@ Browser tests use the environment's `/usr/bin/chromium`. Change `executablePath`
 Includes an animated intro, scroll-expanding portrait, project previews, 14 project detail routes, responsive layouts, and reduced-motion support. The live reference returned HTTP 403, so the recordings are the visual source. Images are cropped stills from those recordings; some project names, descriptions and detail compositions are reconstructed. Replace generic social destinations and the contact email before publishing as your own portfolio.
 
 For deployment, serve `dist` after building and configure a fallback to `index.html` for `/work/*` routes. Nothing has been deployed.
+
+Motion uses Lenis for wheel scrolling, subdivided Canvas 2D image surfaces for the intro/hover cards, and a WebGL fragment shader for the local footer ripple and decaying project-image trail. Reduced-motion mode keeps the static content. Browsers without WebGL retain the static footer mark. Add `?replay=1` to the home URL to replay the intro. These effects are reconstructed from the recordings, not the original site's shader source.

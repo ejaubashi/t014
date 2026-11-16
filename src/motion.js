@@ -1,9 +1,13 @@
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
+import { createIntro, createLiquidFooter, createPreviewSurface } from './effects.js';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 let dispose = () => {};
-export function mountMotion() {
+export function mountMotion(logo) {
  dispose();
  const controller = new AbortController();
  const {signal} = controller;
+ const smooth=!reduced()?new Lenis({lerp:.085,smoothWheel:true,anchors:true}):null;
  const frames = new Set();
  let active = true;
  const later = fn => {const id=requestAnimationFrame(()=>{frames.delete(id);if(active)fn()});frames.add(id)};
@@ -14,10 +18,14 @@ export function mountMotion() {
  const section=document.querySelector('.portrait-section');
  const footer=document.querySelector('.footer-mark');
  const preview=document.querySelector('.hover-preview');
- const mark=footer?.querySelector('svg');
- if(mark){mark.insertAdjacentHTML('afterbegin',`<defs><filter id="liquid-mark" x="-15%" y="-25%" width="130%" height="150%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".012 .025" numOctaves="2" seed="8" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></defs>`);mark.querySelector('path').setAttribute('filter','url(#liquid-mark)');}
- const displacement=mark?.querySelector('feDisplacementMap');
- const noise=mark?.querySelector('feTurbulence');
+ const previewSurface=!reduced()?createPreviewSurface(preview):null;
+ const liquid=!reduced()&&footer?createLiquidFooter(document.querySelector('footer'),logo,document.querySelector('.project:last-child')?import.meta.env.BASE_URL+'assets/work-13.webp':import.meta.env.BASE_URL+'assets/portrait.webp'):null;
+ document.querySelectorAll('.project').forEach(row=>row.addEventListener('pointerenter',()=>{
+  const image=document.querySelector('.hover-preview');if(image?.getAttribute('src'))liquid?.setImage(image.src);
+ },{signal}));
+ const introCleanup=intro?.isConnected&&!reduced()?createIntro(intro,original,()=>{
+  sessionStorage.setItem('visited','1');document.body.classList.remove('intro-playing');intro.remove();
+ }):()=>{};
  let tx=innerWidth/2,ty=innerHeight/2,x=tx,y=ty,lastX=x,velocity=0;
  document.addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY},{signal});
  const mirror=original?.cloneNode();
@@ -29,9 +37,10 @@ export function mountMotion() {
  const bend=(img,amount)=>{if(!img)return;img.style.clipPath=`polygon(0 ${amount}%, 25% 0, 75% 0, 100% ${amount}%, 100% ${100-amount}%, 75% 100%, 25% 100%, 0 ${100-amount}%)`};
  let lastScroll=scrollY,speed=0;
  function tick(){
-  if(reduced()){if(mirror)mirror.style.display='none';return;}
+  if(reduced()){document.body.classList.remove('intro-playing');if(mirror)mirror.style.display='none';return;}
+  smooth?.raf(performance.now());
   const ready=!intro||!intro.isConnected;
-  document.body.classList.toggle('motion-ready',ready);
+  document.body.classList.toggle('motion-ready',ready||intro?.classList.contains('revealing'));
   x+=(tx-x)*.13;y+=(ty-y)*.13;
   velocity+=(tx-lastX-velocity)*.1;lastX=tx;
   speed+=(scrollY-lastScroll-speed)*.1;lastScroll=scrollY;
@@ -47,11 +56,12 @@ export function mountMotion() {
    const mix=(a,b)=>a+(b-a)*eased;
    Object.assign(mirror.style,{left:`${mix(origin.left,0)}px`,top:`${mix(origin.top-scrollY,0)}px`,width:`${mix(origin.width,innerWidth)}px`,height:`${mix(origin.height,innerHeight)}px`,transform:`perspective(1600px) rotateX(${Math.max(-5,Math.min(5,speed*.12))*(1-eased)}deg)`});
    bend(mirror,Math.sin(p*Math.PI)*3);
-   mirror.style.opacity=String(Math.min(1,end/(innerHeight*.25)));
+   mirror.style.opacity='1';
   }
-  if(footer){const r=footer.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0){const px=(x/innerWidth-.5),py=(y/innerHeight-.5);footer.style.setProperty('--mx',px);footer.style.setProperty('--my',py);displacement?.setAttribute('scale',String(4+Math.abs(px)*12+Math.min(10,Math.abs(speed))));noise?.setAttribute('baseFrequency',`${.009+Math.abs(px)*.008} ${.015+Math.abs(py)*.015}`);footer.style.setProperty('--warp',`${Math.max(-5,Math.min(5,speed*.2+px*3))}deg`);}}
+  previewSurface?.draw(x,y,velocity);
+  liquid?.draw(performance.now());
   later(tick);
  }
  later(tick);
- dispose=()=>{active=false;controller.abort();frames.forEach(cancelAnimationFrame);mirror?.remove();document.body.classList.remove('motion-ready')};
+ dispose=()=>{smooth?.destroy();active=false;controller.abort();frames.forEach(cancelAnimationFrame);mirror?.remove();introCleanup?.();previewSurface?.destroy();liquid?.destroy();document.body.classList.remove('intro-playing');document.body.classList.remove('motion-ready')};
 }
