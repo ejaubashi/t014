@@ -47,7 +47,7 @@ export function createLiquidFooter(footer,logo,initialImage) {
  if(!gl){canvas.remove();return null}
  const vertex=`attribute vec2 position;varying vec2 uv;void main(){uv=position*.5+.5;gl_Position=vec4(position,0.,1.);}`;
  const fragment=`precision mediump float;
- varying vec2 uv;uniform sampler2D scene;uniform sampler2D picture;uniform vec3 trail[12];uniform vec2 size;uniform float time;uniform float energy;
+ varying vec2 uv;uniform sampler2D scene;uniform sampler2D picture;uniform vec3 trail[12];uniform vec2 size;uniform float time;uniform float energy;uniform vec3 tint;
  void main(){
  vec2 p=vec2(uv.x,1.-uv.y),q=p;float mask=0.;vec2 latest=trail[0].xy;
  for(int i=0;i<12;i++){
@@ -61,7 +61,7 @@ export function createLiquidFooter(footer,logo,initialImage) {
  picUV+=vec2(sin(q.y*15.+time)*.07,cos(q.x*12.-time)*.025)*mask;
  vec3 photo=texture2D(picture,vec2(clamp(picUV.x,0.,1.),1.-clamp(picUV.y,0.,1.))).rgb;
  float inside=step(0.,picUV.x)*step(picUV.x,1.)*step(0.,picUV.y)*step(picUV.y,1.);
- vec3 tinted=photo*vec3(1.,.61,.48);
+ vec3 tinted=photo*tint;
  color=mix(color,color*.35+tinted*.65,mask*inside*.78);
  float grain=fract(sin(dot(p*size,vec2(12.9898,78.233)))*43758.5453)-.5;
  gl_FragColor=vec4(color+grain*.024,1.);
@@ -70,11 +70,13 @@ export function createLiquidFooter(footer,logo,initialImage) {
  const program=gl.createProgram();const vs=compile(gl.VERTEX_SHADER,vertex),fs=compile(gl.FRAGMENT_SHADER,fragment);gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);
  if(!gl.getProgramParameter(program,gl.LINK_STATUS)){canvas.remove();return null}
  gl.useProgram(program);const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);const pos=gl.getAttribLocation(program,'position');gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
- const loc=Object.fromEntries(['scene','picture','trail[0]','size','time','energy'].map(k=>[k,gl.getUniformLocation(program,k)]));
+ const loc=Object.fromEntries(['scene','picture','trail[0]','size','time','energy','tint'].map(k=>[k,gl.getUniformLocation(program,k)]));
  const makeTexture=unit=>{const tex=gl.createTexture();gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,tex);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);return tex};
  const sceneTexture=makeTexture(0),imageTexture=makeTexture(1);
  gl.uniform1i(loc.scene,0);gl.uniform1i(loc.picture,1);
  const palette=getComputedStyle(footer);
+ const tint=palette.getPropertyValue('--footer-bg').trim();
+ gl.uniform3f(loc.tint,...[1,3,5].map(i=>parseInt(tint.slice(i,i+2),16)/255));
  const source=document.createElement('canvas'),context=source.getContext('2d');
  let lastTime=performance.now();
  let lastWidth=0,lastHeight=0,photo=new Image(),pendingImage=initialImage,live=true;
