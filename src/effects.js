@@ -61,7 +61,7 @@ export function createLiquidFooter(footer,logo,initialImage) {
  picUV+=vec2(sin(q.y*15.+time)*.07,cos(q.x*12.-time)*.025)*mask;
  vec3 photo=texture2D(picture,vec2(clamp(picUV.x,0.,1.),1.-clamp(picUV.y,0.,1.))).rgb;
  float inside=step(0.,picUV.x)*step(picUV.x,1.)*step(0.,picUV.y)*step(picUV.y,1.);
- vec3 tinted=photo*vec3(.62,.95,.3);
+ vec3 tinted=photo*vec3(1.,.61,.48);
  color=mix(color,color*.35+tinted*.65,mask*inside*.78);
  float grain=fract(sin(dot(p*size,vec2(12.9898,78.233)))*43758.5453)-.5;
  gl_FragColor=vec4(color+grain*.024,1.);
@@ -74,6 +74,7 @@ export function createLiquidFooter(footer,logo,initialImage) {
  const makeTexture=unit=>{const tex=gl.createTexture();gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,tex);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);return tex};
  const sceneTexture=makeTexture(0),imageTexture=makeTexture(1);
  gl.uniform1i(loc.scene,0);gl.uniform1i(loc.picture,1);
+ const palette=getComputedStyle(footer);
  const source=document.createElement('canvas'),context=source.getContext('2d');
  let lastTime=performance.now();
  let lastWidth=0,lastHeight=0,photo=new Image(),pendingImage=initialImage,live=true;
@@ -83,14 +84,14 @@ export function createLiquidFooter(footer,logo,initialImage) {
  const pointer=e=>{const r=footer.getBoundingClientRect();mx=(e.clientX-r.left)/r.width;my=(e.clientY-r.top)/r.height;moving=1};
  footer.addEventListener('pointermove',pointer);footer.classList.add('liquid-active');
  const svgImage=new Image();let svgReady=false;
- svgImage.onload=()=>{svgReady=true;lastWidth=0};svgImage.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(logo.replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" ').replace('fill="currentColor"','fill="#202020"'));
+ svgImage.onload=()=>{svgReady=true;lastWidth=0};svgImage.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(logo.replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" ').replace('fill="currentColor"',`fill="${getComputedStyle(footer).getPropertyValue('--footer-ink').trim()}"`));
  function draw(now){
   const dt=Math.min(100,now-lastTime);lastTime=now;
   const r=footer.getBoundingClientRect();if(r.bottom<=0||r.top>=innerHeight)return;
   const dpr=Math.min(devicePixelRatio,1,1600/r.width),w=Math.round(r.width*dpr),h=Math.round(r.height*dpr);
   if(w!==lastWidth||h!==lastHeight){
    canvas.width=w;canvas.height=h;source.width=w;source.height=h;gl.viewport(0,0,w,h);
-   context.fillStyle='#98ef4c';context.fillRect(0,0,w,h);
+   context.fillStyle=palette.getPropertyValue('--footer-bg').trim();context.fillRect(0,0,w,h);
    const mark=footer.querySelector('.footer-mark').getBoundingClientRect();
    if(svgReady)context.drawImage(svgImage,16*dpr,(mark.top-r.top)*dpr,(r.width-32)*dpr,mark.height*dpr);
    upload(0,sceneTexture,source);lastWidth=w;lastHeight=h;
