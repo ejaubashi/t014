@@ -1,0 +1,193 @@
+{
+  "date": "2026-11-16",
+  "baselineCommit": "7c93b1dd53ef5ed07212d33102606d380eae515c",
+  "scope": "Local production build at /t014/, not a live GitHub Pages or real-device audit",
+  "lighthouse": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-16T13:33:05.316Z",
+    "formFactor": "mobile",
+    "throttling": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.5600000000002,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    },
+    "throttlingMethod": "simulate",
+    "scores": {
+      "performance": 98,
+      "accessibility": 100,
+      "best-practices": 96,
+      "seo": 100
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1126.1674,
+        "unit": "millisecond"
+      },
+      "largest-contentful-paint": {
+        "value": 1126.1674,
+        "unit": "millisecond"
+      },
+      "total-blocking-time": {
+        "value": 143.5,
+        "unit": "millisecond"
+      },
+      "cumulative-layout-shift": {
+        "value": 0.00014730055034705352,
+        "unit": "unitless"
+      }
+    },
+    "warnings": [],
+    "consoleIssue": "Missing /favicon.ico produced one 404",
+    "limits": "One simulated mobile navigation. Not field Core Web Vitals; no INP measurement or published-origin verification."
+  },
+  "axe": {
+    "version": "4.14.0",
+    "routes": [
+      {
+        "variant": "desktop-home",
+        "viewportWidth": 1440,
+        "documentWidth": 1440,
+        "violationCount": 0,
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 17
+          }
+        ],
+        "h1": [
+          "SURYA\u00a0ADITYA"
+        ],
+        "runtimeErrors": []
+      },
+      {
+        "variant": "mobile-home",
+        "viewportWidth": 390,
+        "documentWidth": 390,
+        "violationCount": 0,
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 12
+          }
+        ],
+        "h1": [
+          "SURYA\u00a0ADITYA"
+        ],
+        "runtimeErrors": []
+      },
+      {
+        "variant": "desktop-detail",
+        "viewportWidth": 1440,
+        "documentWidth": 1440,
+        "violationCount": 0,
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 2
+          }
+        ],
+        "h1": [],
+        "runtimeErrors": []
+      },
+      {
+        "variant": "mobile-detail",
+        "viewportWidth": 390,
+        "documentWidth": 390,
+        "violationCount": 0,
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 2
+          }
+        ],
+        "h1": [],
+        "runtimeErrors": []
+      },
+      {
+        "variant": "reduced-motion",
+        "viewportWidth": 390,
+        "documentWidth": 390,
+        "violationCount": 0,
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": 2
+          }
+        ],
+        "h1": [
+          "SURYA\u00a0ADITYA"
+        ],
+        "runtimeErrors": []
+      }
+    ],
+    "limits": "No automatically detected violations in these states; incomplete color contrast checks and manual usability issues remain."
+  },
+  "manual": {
+    "firstFocus": {
+      "text": "HOME",
+      "tag": "A"
+    },
+    "keyboardPreview": false,
+    "detailFocus": {
+      "tag": "BODY",
+      "text": "P.01OABACK TO HOMEOBYS AGENCYOBYS AGENCY2026OBYS AGENCYDESIGN & DEVELOPMENT \u2014 20",
+      "h1": null
+    },
+    "backScroll": {
+      "scrollY": 1316,
+      "projectsTop": 853.0625
+    },
+    "focusedProject": {
+      "scrollY": 0,
+      "rect": {
+        "x": 10,
+        "y": 2179.0625,
+        "width": 370,
+        "height": 105.984375,
+        "top": 2179.0625,
+        "right": 380,
+        "bottom": 2285.046875,
+        "left": 10
+      },
+      "outline": "rgb(17, 17, 16) solid 2px"
+    },
+    "noJS": "",
+    "introWallMs": 5678,
+    "previewDetailStatus": 200
+  },
+  "runtimeInstrumentation": {
+    "windowMs": 1200,
+    "samples": [
+      {
+        "name": "hero idle, footer offscreen",
+        "gpu": 0,
+        "image": 0
+      },
+      {
+        "name": "footer visible, no pointer movement",
+        "gpu": 8,
+        "image": 0
+      },
+      {
+        "name": "project preview, stationary pointer",
+        "gpu": 0,
+        "image": 3504
+      }
+    ],
+    "limits": "Draw-call counts in headless Chromium, not device FPS, energy consumption, or a benchmark comparison."
+  },
+  "motionPreferenceProbe": {
+    "initialReduce": {
+      "transform": "none",
+      "motionReady": false
+    },
+    "afterNormal1500ms": {
+      "transform": "matrix(0.996195, 0.0871557, -0.0871557, 0.996195, 0, 241.913)",
+      "motionReady": false
+    },
+    "result": "Heading remains translated outside its clipped container after changing reduced motion to no preference."
+  }
+}
