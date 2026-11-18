@@ -50,10 +50,92 @@ export const artworks = [
     license: "differential-mesh-MIT.txt",
   },
 ];
+const sweetTapeMedia = "projects/sweet-tape/";
 export const projects = [
   {
-    slug: "field-notes",
+    slug: "sweet-tape",
     number: "01",
+    initials: "ST",
+    title: "Sweet Tape",
+    category: "Interactive web experience",
+    summary:
+      "Sweet Tape turns a roll of tape into an interactive world. Make a roll in the Sweet Lab, tear through the page and step inside a miniature 3D factory.",
+    url: "https://ejaubashi.github.io/t015/",
+    technology: "Three.js, WebGL, GSAP ScrollTrigger, Matter.js and custom shaders",
+    shareImage: sweetTapeMedia + "share.png",
+    cover: {
+      src: sweetTapeMedia + "factory.webp",
+      preview: { src: sweetTapeMedia + "factory-small.webp", width: 768 },
+      alt: "The Sweet Factory, with three miniature stations joined by a conveyor belt",
+      width: 1600,
+      height: 900,
+    },
+    reel: {
+      type: "video",
+      src: sweetTapeMedia + "showreel.mp4",
+      poster: sweetTapeMedia + "landing.webp",
+      alt: "Sweet Tape showreel, from the landing page to the personalised roll",
+      caption: "Project showreel · 25 sec · silent",
+      width: 1920,
+      height: 1080,
+    },
+    sections: [
+      {
+        title: "The Sweet Lab",
+        description:
+          "Choose a colour, name the roll and pick a finish. Turn the 3D preview to see how the label and material look together.",
+        media: [
+          {
+            src: sweetTapeMedia + "customizer.webp",
+            alt: "The Sweet Lab customizer with a 3D tape roll, colour swatches, a name field and two finishes",
+            width: 1600,
+            height: 900,
+          },
+        ],
+      },
+      {
+        title: "The Other Side",
+        description:
+          "Tear the paper to reveal a portal inside a tape roll. Drag to look around the Sweet Factory or visit the colour, label and dispatch stations.",
+        media: [
+          {
+            type: "video",
+            src: sweetTapeMedia + "factory-desktop.mp4",
+            poster: sweetTapeMedia + "portal.webp",
+            alt: "Desktop walkthrough of the tear, portal and miniature factory",
+            caption: "Desktop walkthrough · 19 sec",
+            width: 1920,
+            height: 1080,
+          },
+          {
+            type: "video",
+            src: sweetTapeMedia + "factory-mobile.mp4",
+            poster: sweetTapeMedia + "mobile-tear.webp",
+            alt: "Mobile walkthrough of the tear, portal and miniature factory",
+            caption: "Mobile walkthrough · 15 sec",
+            width: 1080,
+            height: 1920,
+          },
+        ],
+      },
+      {
+        title: "Made by you",
+        description:
+          "At the end of the journey, a field of particles comes together to form the visitor’s personalised roll.",
+        media: [
+          {
+            src: sweetTapeMedia + "custom-roll.webp",
+            alt: "The finished orange tape roll with the words Make It Sweet and Made By You",
+            width: 1600,
+            height: 900,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "field-notes",
+    number: "02",
     initials: "FN",
     title: "Field Notes",
     category: "Art & editorial",
@@ -77,7 +159,7 @@ export const projects = [
   },
   {
     slug: "common-ground",
-    number: "02",
+    number: "03",
     initials: "CG",
     title: "Common Ground",
     category: "Identity & web direction",
@@ -101,7 +183,7 @@ export const projects = [
   },
   {
     slug: "matter-in-motion",
-    number: "03",
+    number: "04",
     initials: "MM",
     title: "Matter in Motion",
     category: "Interaction & digital culture",

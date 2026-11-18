@@ -7,7 +7,7 @@ const visit = async (page) => {
 const instant = (page) =>
   page.evaluate(() => (document.documentElement.style.scrollBehavior = "auto"));
 
-test("Endi branding, real contact and three transparent design studies", async ({
+test("Endi branding, contact and Sweet Tape as the first selected project", async ({
   page,
 }) => {
   const errors = [];
@@ -17,7 +17,14 @@ test("Endi branding, real contact and three transparent design studies", async (
     page.getByRole("heading", { name: "ENDI JAUBASHI", level: 1 }),
   ).toBeVisible();
   await expect(page).toHaveTitle("Endi Jaubashi — Creative Web Designer");
-  await expect(page.locator(".project")).toHaveCount(3);
+  const cards = page.locator(".project");
+  await expect(cards).toHaveCount(4);
+  await expect(cards.first()).toContainText("Sweet Tape");
+  await expect(cards.first()).toHaveAttribute("href", "/t014/work/sweet-tape/");
+  await expect(cards.first().locator(".project-cover")).toBeVisible();
+  await expect(
+    page.getByText("Concept study / 2026", { exact: true }),
+  ).toHaveCount(3);
   await expect(page.locator("body")).not.toContainText(
     /Surya|Bali|AWWWARDS|OBYS/,
   );
@@ -25,10 +32,55 @@ test("Endi branding, real contact and three transparent design studies", async (
     "href",
     "mailto:jaubashi@gmail.com",
   );
-  await expect(page.locator(".section-heading")).toContainText(
-    "not commissioned client work",
+  await expect(page.getByRole("heading", { name: "Selected work" })).toBeVisible();
+  await cards.first().click();
+  await expect(
+    page.getByRole("heading", { name: "Sweet Tape", level: 1 }),
+  ).toBeVisible();
+  await expect(page.locator(".back-link")).toHaveAttribute(
+    "href",
+    "/t014/#project-sweet-tape",
+  );
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    "content",
+    "https://ejaubashi.github.io/t014/projects/sweet-tape/share.png",
   );
   expect(errors).toEqual([]);
+});
+test("Sweet Tape showcases playable footage and the mobile layout", async ({
+  page,
+  request,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("work/sweet-tape/");
+  await expect(page.getByRole("link", { name: "Visit Sweet Tape" }))
+    .toHaveAttribute("href", "https://ejaubashi.github.io/t015/");
+  for (const heading of ["The Sweet Lab", "The Other Side", "Made by you"]) {
+    await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+
+  const videos = page.locator(".showcase video");
+  await expect(videos).toHaveCount(3);
+  for (const video of await videos.all()) {
+    await expect(video).toHaveAttribute("preload", "none");
+    const loaded = await video.evaluate(async (element) => {
+      if (!element.paused || !element.controls) return false;
+      element.muted = true;
+      await element.play();
+      element.pause();
+      return element.videoWidth > 0 && element.videoHeight > 0;
+    });
+    expect(loaded).toBe(true);
+  }
+
+  const range = await request.get("projects/sweet-tape/showreel.mp4", {
+    headers: { Range: "bytes=0-99" },
+  });
+  expect(range.status()).toBe(206);
+  expect(range.headers()["content-type"]).toBe("video/mp4");
+  expect(range.headers()["content-range"]).toMatch(/^bytes 0-99\/\d+$/);
+  expect(await range.body()).toHaveLength(100);
 });
 test("first intro is short, skippable and replay remains available", async ({
   page,
@@ -261,6 +313,7 @@ test("prerendered pages and distinct metadata work without JavaScript", async ({
   const page = await context.newPage();
   for (const [path, title] of [
     ["", "ENDI JAUBASHI"],
+    ["work/sweet-tape/", "Sweet Tape"],
     ["work/field-notes/", "Field Notes"],
     ["work/common-ground/", "Common Ground"],
     ["work/matter-in-motion/", "Matter in Motion"],

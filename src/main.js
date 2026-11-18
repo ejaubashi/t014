@@ -42,8 +42,10 @@ function updateMeta() {
     ['meta[property="og:title"]', meta.title],
     ['meta[property="og:description"]', meta.description],
     ['meta[property="og:url"]', meta.url],
+    ['meta[property="og:image"]', meta.image],
     ['meta[name="twitter:title"]', meta.title],
     ['meta[name="twitter:description"]', meta.description],
+    ['meta[name="twitter:image"]', meta.image],
   ]) {
     const node = document.querySelector(selector);
     node?.setAttribute(node.tagName === "LINK" ? "href" : "content", value);
@@ -55,7 +57,7 @@ function bindPage() {
   const { signal } = pageController;
   updateMeta();
   const preview = document.querySelector(".hover-preview");
-  document.querySelectorAll(".project").forEach((row) => {
+  document.querySelectorAll(".project[data-art]").forEach((row) => {
     const show = (keyboard) => {
       if (!preview) return;
       preview.src = row.dataset.art;

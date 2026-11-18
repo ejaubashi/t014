@@ -27,7 +27,7 @@ The GitHub Actions workflow builds physical `work/<slug>/index.html` files and d
 
 Edit `src/content.js` for the name, role, contact details, project narratives, source links and EJ vector mark. `src/render.js` is shared between build-time rendering and client-side navigation. Each route has meaningful HTML before JavaScript. Pages include distinct metadata, a PNG sharing card, a favicon, sitemap and robots file.
 
-The three featured pages are **concept studies**, not claims of commissioned work, previous clients, measured outcomes, awards or collaboration with the featured artist. The earlier reference biography, contact details and low-resolution recording crops have been removed from the active site.
+Field Notes, Common Ground and Matter in Motion are **self-initiated concept studies**. Sweet Tape is listed first under Selected work. Portfolio entries can use a local cover and an image or video gallery. The earlier reference biography, contact details and low-resolution recording crops have been removed from the active site.
 
 ## Artwork
 
