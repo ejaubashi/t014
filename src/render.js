@@ -53,8 +53,11 @@ export function home(base) {
  <section id="projects" class="projects" aria-labelledby="projects-title"><div class="section-heading"><h2 id="projects-title">Selected work</h2></div>${projects.map((p) => projectCard(p, base)).join("")}</section>${footer(base)}</main><img class="hover-preview" alt="" aria-hidden="true">`;
 }
 function mediaFigure(item, base, className = "") {
+  const track = item.captions
+    ? `<track kind="captions" src="${e(base + item.captions)}" srclang="en" label="English">`
+    : "";
   const media = item.type === "video"
-    ? `<video controls playsinline preload="none" src="${e(base + item.src)}" width="${item.width}" height="${item.height}" aria-label="${e(item.alt)}"${item.poster ? ` poster="${e(base + item.poster)}"` : ""}></video>`
+    ? `<video controls playsinline preload="none" src="${e(base + item.src)}" width="${item.width}" height="${item.height}" aria-label="${e(item.alt)}"${item.poster ? ` poster="${e(base + item.poster)}"` : ""}>${track}</video>`
     : projectImage(item, base);
   const portrait = item.width < item.height ? " showcase-portrait" : "";
   return `<figure class="${className}${portrait}">${media}${item.caption ? `<figcaption>${e(item.caption)}</figcaption>` : ""}</figure>`;
@@ -67,6 +70,11 @@ function projectMedia(p, base) {
       <div class="showcase-gallery">${section.media.map((item) => mediaFigure(item, base)).join("")}</div>
     </section>`).join("")}
     <p class="showcase-tech"><span class="eyebrow">Built with</span> ${e(p.technology)}</p>
+    ${p.credits ? `<section class="showcase-credits" aria-labelledby="showcase-credits-title">
+      <h2 id="showcase-credits-title">Artwork and sound credits</h2>
+      <p>${e(p.credits.description)}</p>
+      <div class="credit-links"><a href="${e(base + p.credits.sources)}" download>Download artwork sources ↓</a><a href="${e(base + p.credits.license)}" download>CC0 1.0 licence ↓</a></div>
+    </section>` : ""}
   </div>`;
 }
 export function detail(p, base) {

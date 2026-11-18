@@ -51,6 +51,7 @@ export const artworks = [
   },
 ];
 const sweetTapeMedia = "projects/sweet-tape/";
+const nocturneMedia = "projects/nocturne/";
 export const projects = [
   {
     slug: "sweet-tape",
@@ -134,8 +135,104 @@ export const projects = [
     ],
   },
   {
-    slug: "field-notes",
+    slug: "nocturne",
     number: "02",
+    initials: "NO",
+    title: "Nocturne",
+    category: "Interactive 3D exhibition",
+    summary:
+      "The after-dark gallery in Benno’s Light. Walk through four connected rooms where paintings, kinetic installations and an ambient soundscape shape a first-person visit.",
+    url: "https://ejaubashi.github.io/t013/?view=spatial",
+    technology: "Three.js, React and Vite",
+    shareImage: nocturneMedia + "share.png",
+    cover: {
+      src: nocturneMedia + "nocturne-hall.webp",
+      preview: { src: nocturneMedia + "nocturne-hall-small.webp", width: 768 },
+      alt: "A crimson ring suspended among spotlit paintings in Nocturne Hall",
+      width: 1600,
+      height: 900,
+    },
+    reel: {
+      type: "video",
+      src: nocturneMedia + "nocturne-showcase-landscape.mp4",
+      poster: nocturneMedia + "nocturne-hall.webp",
+      captions: nocturneMedia + "gallery-film.vtt",
+      alt: "Landscape film touring the four rooms of Nocturne",
+      caption: "Gallery film · 26 sec · original ambient sound",
+      width: 1920,
+      height: 1080,
+    },
+    sections: [
+      {
+        title: "Four connected rooms",
+        description:
+          "Each room has a different light installation. Crimson rings give way to floating forms and angular sculpture as visitors move through the exhibition.",
+        media: [
+          {
+            src: nocturneMedia + "nocturne-hall.webp",
+            alt: "A crimson kinetic ring and pools of light on the walls",
+            caption: "Nocturne Hall",
+            width: 1600,
+            height: 900,
+          },
+          {
+            src: nocturneMedia + "scarlet-room.webp",
+            alt: "Suspended red orbits between paintings in the Scarlet Room",
+            caption: "Scarlet Room",
+            width: 1120,
+            height: 630,
+          },
+          {
+            src: nocturneMedia + "night-garden.webp",
+            alt: "Floating forms under a curved white light in the Night Garden",
+            caption: "Night Garden",
+            width: 1120,
+            height: 630,
+          },
+          {
+            src: nocturneMedia + "obsidian-room.webp",
+            alt: "Faceted forms suspended over a white ring of light in the Obsidian Room",
+            caption: "Obsidian Room",
+            width: 1120,
+            height: 630,
+          },
+        ],
+      },
+      {
+        title: "A closer look",
+        description:
+          "The films stay at standing eye height. Close-ups show how the gallery lights and labels frame each painting.",
+        media: [
+          {
+            src: nocturneMedia + "lute-player.webp",
+            alt: "Caravaggio’s The Lute Player beneath a spotlight on a dark gallery wall",
+            caption: "Caravaggio · The Lute Player",
+            width: 1440,
+            height: 810,
+          },
+          {
+            type: "video",
+            src: nocturneMedia + "nocturne-reel-vertical.mp4",
+            poster: nocturneMedia + "vertical-poster.webp",
+            captions: nocturneMedia + "vertical-reel.vtt",
+            alt: "Vertical film moving through Nocturne’s four exhibition rooms",
+            caption: "Vertical reel · 17 sec · original ambient sound",
+            width: 1080,
+            height: 1920,
+          },
+        ],
+      },
+    ],
+    credits: {
+      description:
+        "Painting reproductions come from the community CC0 archive pmilovanov/hermitage-art. The films use the exhibition’s original procedural sound. Historical photographs and Benno Kern’s testimony retain their credits in Benno’s Light.",
+      sources: nocturneMedia + "credits/artwork-sources.json",
+      license: nocturneMedia + "credits/CC0-1.0.txt",
+    },
+  },
+  {
+    slug: "field-notes",
+    number: "03",
     initials: "FN",
     title: "Field Notes",
     category: "Art & editorial",
@@ -159,7 +256,7 @@ export const projects = [
   },
   {
     slug: "common-ground",
-    number: "03",
+    number: "04",
     initials: "CG",
     title: "Common Ground",
     category: "Identity & web direction",
@@ -183,7 +280,7 @@ export const projects = [
   },
   {
     slug: "matter-in-motion",
-    number: "04",
+    number: "05",
     initials: "MM",
     title: "Matter in Motion",
     category: "Interaction & digital culture",

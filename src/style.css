@@ -702,6 +702,11 @@ footer button:focus-visible {
   display: grid;
   gap: clamp(16px, 2vw, 32px);
 }
+@media (min-width: 701px) {
+  .showcase-gallery:has(> :nth-child(2)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 .showcase-gallery:has(.showcase-portrait) {
   grid-template-columns: minmax(0, 3.16fr) minmax(0, 1fr);
 }
@@ -718,6 +723,21 @@ footer button:focus-visible {
 .showcase-tech .eyebrow {
   margin-right: 10px;
   color: var(--text);
+}
+.showcase-credits {
+  margin-top: 36px;
+  border-top: 1px solid #494844;
+  padding-top: 24px;
+  color: var(--muted);
+}
+.showcase-credits h2 {
+  color: var(--text);
+  font-size: 18px;
+}
+.showcase-credits p {
+  max-width: 72ch;
+  margin-bottom: 6px;
+  font-size: 14px;
 }
 .case-narrative {
   max-width: 1100px;

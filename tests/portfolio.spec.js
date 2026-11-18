@@ -6,6 +6,17 @@ const visit = async (page) => {
 };
 const instant = (page) =>
   page.evaluate(() => (document.documentElement.style.scrollBehavior = "auto"));
+const expectPlayable = async (video) => {
+  await expect(video).toHaveAttribute("preload", "none");
+  const loaded = await video.evaluate(async (element) => {
+    if (!element.paused || !element.controls) return false;
+    element.muted = true;
+    await element.play();
+    element.pause();
+    return element.videoWidth > 0 && element.videoHeight > 0;
+  });
+  expect(loaded).toBe(true);
+};
 
 test("Endi branding, contact and Sweet Tape as the first selected project", async ({
   page,
@@ -18,10 +29,11 @@ test("Endi branding, contact and Sweet Tape as the first selected project", asyn
   ).toBeVisible();
   await expect(page).toHaveTitle("Endi Jaubashi — Creative Web Designer");
   const cards = page.locator(".project");
-  await expect(cards).toHaveCount(4);
+  await expect(cards).toHaveCount(5);
   await expect(cards.first()).toContainText("Sweet Tape");
   await expect(cards.first()).toHaveAttribute("href", "/t014/work/sweet-tape/");
   await expect(cards.first().locator(".project-cover")).toBeVisible();
+  await expect(cards.nth(1)).toHaveAttribute("href", "/t014/work/nocturne/");
   await expect(
     page.getByText("Concept study / 2026", { exact: true }),
   ).toHaveCount(3);
@@ -62,17 +74,7 @@ test("Sweet Tape showcases playable footage and the mobile layout", async ({
 
   const videos = page.locator(".showcase video");
   await expect(videos).toHaveCount(3);
-  for (const video of await videos.all()) {
-    await expect(video).toHaveAttribute("preload", "none");
-    const loaded = await video.evaluate(async (element) => {
-      if (!element.paused || !element.controls) return false;
-      element.muted = true;
-      await element.play();
-      element.pause();
-      return element.videoWidth > 0 && element.videoHeight > 0;
-    });
-    expect(loaded).toBe(true);
-  }
+  for (const video of await videos.all()) await expectPlayable(video);
 
   const range = await request.get("projects/sweet-tape/showreel.mp4", {
     headers: { Range: "bytes=0-99" },
@@ -81,6 +83,36 @@ test("Sweet Tape showcases playable footage and the mobile layout", async ({
   expect(range.headers()["content-type"]).toBe("video/mp4");
   expect(range.headers()["content-range"]).toMatch(/^bytes 0-99\/\d+$/);
   expect(await range.body()).toHaveLength(100);
+});
+test("Nocturne plays both films with caption tracks and credits the artwork", async ({
+  page,
+  request,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("work/nocturne/");
+  await expect(page.getByRole("heading", { name: "Nocturne", level: 1 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Visit Nocturne" })).toHaveAttribute(
+    "href",
+    "https://ejaubashi.github.io/t013/?view=spatial",
+  );
+  const rooms = page.locator(".showcase-section").filter({ hasText: "Four connected rooms" });
+  await expect(rooms.locator("img")).toHaveCount(4);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+
+  const videos = page.locator(".showcase video");
+  await expect(videos).toHaveCount(2);
+  for (const video of await videos.all()) {
+    await expectPlayable(video);
+    const captions = video.locator('track[kind="captions"]');
+    await captions.evaluate((track) => { track.track.mode = "hidden"; });
+    await expect.poll(() => captions.evaluate((track) => track.track.cues?.length ?? 0))
+      .toBeGreaterThan(0);
+  }
+  const credits = page.getByRole("link", { name: "Download artwork sources" });
+  await expect(credits).toBeVisible();
+  const response = await request.get(await credits.getAttribute("href"));
+  expect(response.status()).toBe(200);
+  expect((await response.json()).reproduction_license).toBe("CC0-1.0");
 });
 test("first intro is short, skippable and replay remains available", async ({
   page,
@@ -314,6 +346,7 @@ test("prerendered pages and distinct metadata work without JavaScript", async ({
   for (const [path, title] of [
     ["", "ENDI JAUBASHI"],
     ["work/sweet-tape/", "Sweet Tape"],
+    ["work/nocturne/", "Nocturne"],
     ["work/field-notes/", "Field Notes"],
     ["work/common-ground/", "Common Ground"],
     ["work/matter-in-motion/", "Matter in Motion"],
